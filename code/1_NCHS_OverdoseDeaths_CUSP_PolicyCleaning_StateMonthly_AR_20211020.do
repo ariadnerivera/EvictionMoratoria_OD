@@ -1,5 +1,5 @@
 * Update 10/20/2021
-* The data is based on data vailable 08/01/2021
+* The data is based on data vailable 10/03/2021
 
 * This code is to create monthly overdose death counts based on NCHS
 * Provisional Drug Overdose Death Counts
@@ -244,20 +244,78 @@ drop in 52/999
 save "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\intermediate_data\COVID-19 US state policy database 6_28_2021.dta", replace
 
 
-** Merge overdose deaths and policy data
+
+* Clean Unemployment rate
+clear
+import excel "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\raw_data\ststdsadata\ststdsadata.xlsx", sheet("ststdsadata") cellrange(A9:K29105)
+
+
+*StateAbbreviation StateName StateFIPS
+
+rename A StateFIPS
+rename B StateName
+rename C Year
+rename D MonthNum
+rename E Population
+rename F LaborForce
+rename G LaborForcePctPop
+rename H Employment
+rename I EmpPctPop
+rename J Unemployment
+rename K UnempRate
+
+destring Year MonthNum StateFIPS, replace
+
+keep if Year>=2015
+
+replace StateFIPS=6 if StateName=="Los Angeles County" 
+replace StateFIPS=36 if StateFIPS==51000
+
+
+*egen  unempweight= wtmean(UnempRate), by(StateFIPS MonthNum Year) weight(LaborForce)
+
+collapse (mean) UnempRate [aw=LaborForce], by (StateFIPS Year MonthNum)
+
+* Drop data after Jan 2021
+
+drop if MonthNum>1 & Year==2021
+
+save "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\intermediate_data\StateMonthlyUnempRate.dta", replace
+
+
+
+** Merge overdose deaths and policy data and unemplyment
 use "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\intermediate_data\NCHS_EarlyReleaseOverdoseDeaths_States_Monthly_AR_20210827.dta", clear
 merge m:1 StateAbbreviation using "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\intermediate_data\COVID-19 US state policy database 6_28_2021.dta", nogenerate
 
 gen Date = mdy(MonthNum, DayStart, Year) 
 format Date %d
 
+
+*gen days of the month
+
+*4,6,9,11
+gen daysmonth=30 if MonthNum==4 | MonthNum==6 | MonthNum==9 | MonthNum==11
+
+replace daysmonth=31 if MonthNum==1 | MonthNum==3 | MonthNum==5 | MonthNum==7 ///
+	| MonthNum==8 | MonthNum==10 | MonthNum==12
+
+* February 2020 leap year
+replace daysmonth=29 if MonthNum==2 & (Year==2020 | Year==2016)
+
+* February 2021 leap year
+replace daysmonth=28 if MonthNum==2 & (Year!=2020 & Year!=2016)
+
 * Create a new variable with the values formatted as dates
 foreach var of varlist nSTEMERG-nCASOPEN2 {
 	gen p`var'=`var'
-	replace p`var'=(`var'-Date)/30
+	replace p`var'=1-[(`var'-Date)/daysmonth]
 	replace p`var'=1 if Date>=`var' & `var'!=. & (p`var'<0 | p`var'>=1)
 	replace p`var'=0 if Date< `var' & p`var'>=1
+	replace p`var'=0 if p`var'<0
 	}
+	
+	
 	
 *List of variables with ^ 
 * 	
@@ -269,7 +327,7 @@ foreach var of varlist nSTEMERG-nCASOPEN2 {
 	
 *	}
 	
-drop nSTEMERG-nCASOPEN2
+*drop nSTEMERG-nCASOPEN2
 
 foreach var of varlist STEMERG STEMERGEND CLSCHOOL CLDAYCR OPNCLDCR ///
 	CLNURSHM STAYHOME  END_STHM CLBSNS END_BSNS FM_ALL FM_ALL2 FM_EMP ///
@@ -426,6 +484,10 @@ format modate %tm
 sort StateName modate
 egen date=group(modate)
 
+destring StateFIPS, replace
+merge m:1 StateFIPS MonthNum Year using "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\intermediate_data\StateMonthlyUnempRate.dta"
 
-save "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\analytic_data\State_monthly_AR_20211020.dta"
+drop _merge
+
+save "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD\analytic_data\State_monthly_AR_20211020.dta", replace
 
