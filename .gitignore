@@ -1,0 +1,27 @@
+# Ignore data files
+data/
+*.csv
+*.graph
+*.rds
+
+# Ignore folders
+abstract/
+data/
+descriptives/
+MLMClass/
+progress/
+results/
+SER/
+Test/
+obsolete/
+
+code/obsolete/
+
+#R history
+*.Rhistory
+
+#Ignore html
+*.html
+
+#Jupyter notebooks check points
+.ipynb_checkpoints
