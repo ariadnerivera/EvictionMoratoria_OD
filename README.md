@@ -1,4 +1,24 @@
-## Repository for Eviction Moratoria and Overdoses project
+# Eviction Moratoria and Drug Overdoses
+
+This repository contains the code to clean and conduct analysis in the study:
+
+Rivera Aguirre A, Díaz I, Routhier G, McKay C, Matthay E, Friedman S, Doran K,
+Cerdá M. The effect of lifting eviction moratoria on fatal drug overdoses in the
+context of the COVID-19 pandemic in the US. Under Review. 2024.
+
+
+Running the code requires, as noted in the code, requires folder structure as
+follows:
+
+	EvictionMoratoria_OD/
+	|-	code      # Where the scripts are stored
+	|-	data      # Data files organized as follows
+	|	|-	1_raw	# All files as obtained from the source
+		|-	2_intermediate 	# All intermediate dataset
+		|-	3_analytic		# Analytic datasets created
+  |-	results      # Where the results are stored
+
+
 
 
 ### The order to run the files is:
