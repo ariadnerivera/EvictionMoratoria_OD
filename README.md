@@ -16,11 +16,11 @@ follows:
 	|	|-	1_raw			# All files as obtained from the source
 		|-	2_intermediate 	# All intermediate dataset
 		|-	3_analytic		# Analytic datasets created
-	|-	Results   # Where results are stored
+	|-	results   # Where results are stored
 
 
-### The order to run the files in the code folder is:
-#### 1. Clean data from various data sources
+## The order to run the files in the code folder is:
+### 1. Clean data from various data sources
 a) CUSP database
 - [Clean CUSP data](code/00a_Clean_CUSP_policydata.ipynb)
 This script retrieves CUSP policy data from https://github.com/USCOVIDpolicy/COVID-19-US-State-Policy-Database and creates the file cusp.csv
@@ -61,10 +61,23 @@ k) [Substance Use Disorders, Mental Health, Treatment Need](code/00k_NSDUH_publi
 
 l) [Rural/urban classification](code/00l_USDA_rucc2023.do)
 
-#### 2. Create analytic files
+### 2. Create analytic files
 a) [Create analytic files](code/01a_mergedatafiles.do)
+This code does the final cleaning and creates the analytic file
 
-#### 3. Analytic code
+### 3. Analytic code
 
+#### Main analysis
+- [ATE adjusted](code/03a_tmle_sdr_main_20240530.R)
+- [ATE unadjusted](code/03a_tmle_sdr_main_unadjusted_20240530.R)
+- [MTP adjusted](code/03b_tmle_sdr_mtp_20240530.R)
+- [MTP unadjusted](code/03b_tmle_sdr_mtp_unadjusted_20240530.R)
 
-01a_mergedatafiles_publish
+#### Sensitivity analysis
+- [ATE adjusted + CARES Act](code/03c_tmle_sdr_cares_allmonths_20240530.R)
+- [Any Moratoria](code/03d_tmle_sdr_anymoratoria_20240530.R)
+- [Stratified Before/After Sep 2020](code/03e_tmle_sdr_Sep2020_20240530.R)
+- Tertiles using COVID-19 Housing Policy Scorecard
+  a) [Tertile 1](code/03f_ltmle_code_tertile1_20240530.R)
+  b) [Tertile 2](code/03f_ltmle_code_tertile2_20240530.R)
+  b) [Tertile 3](code/03f_ltmle_code_tertile3_20240530.R)
