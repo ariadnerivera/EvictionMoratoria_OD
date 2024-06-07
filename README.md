@@ -17,10 +17,42 @@ follows:
 		|-	2_intermediate 	# All intermediate dataset
 		|-	3_analytic		# Analytic datasets created
 	|-	results   # Where results are stored
+		|-	main
+		|-	main_unadjusted
+		|-	mtp
+		|-	mtp_unadjusted
+		|-	caresact
+		|-	anymoratoria
+		|-	sep2020
+		|-	tertiles
+		|-	stayslifted
+
+
+
+## Dataset list
+
+
+## Computational Requirements
+- Stata (code was last run with version 18)
+- R 3.4.2
+- Python
+  - pandas
+  - glob
+  - numpy
+
+
+# Description of the code
+- Code beginning with 00 will retrieve and do initial cleaning for needed for merging
+- Code beginning with 01 will creates analytic file
+- Code beginning with 03 runs analyses
+- Code beginning with 04 compiles results
 
 
 ## The order to run the files in the code folder is:
-### 1. Clean data from various data sources
+
+### 0. Data preparation
+Download the data files referenced above in the subfolders indicated.
+
 a) CUSP database
 - [Clean CUSP data](code/00a_Clean_CUSP_policydata.ipynb)
 This script retrieves CUSP policy data from https://github.com/USCOVIDpolicy/COVID-19-US-State-Policy-Database and creates the file cusp.csv
@@ -29,7 +61,8 @@ This script retrieves CUSP policy data from https://github.com/USCOVIDpolicy/COV
 This code reformats date variable, so it can be merged with other datasets. Creates the file: cusp_datesfmt.dta
 
 b) [Append mortality data by county and month from 2017-2021](code/00b_countymortalitydata.R)
-This code appends mortality data previously extracted
+This code appends mortality data previously extracted. This dataset is restricted due to DUA.
+Instructions on how to access these data is outlined above.
 
 c) [Clean ACS County level data](code/00c_ACSCounydata.ipynb)
 Census data obtained from socialexplorer.com and stored in data/1_raw/census_acs/
@@ -44,7 +77,7 @@ e) Monthly unemployment data and County Economic Impact Index
 - [Clean unemployment and index data](code/00ebis_clean_lausunemp_economiccovidindex.do)
 
 f) Oxford Covid-19 Government Response Tracker (OxCGRT) indeces
- - [Retrieve indeces data](code/00f_ Retrieve_OxCGRT_index.ipynb)
+ - [Retrieve indeces data](code/00f_Retrieve_OxCGRT_index.ipynb)
  - [Clean oxford index](code/00fbis_cleanoxforrdindex.do)
 
 g) [Opioid Dispensing Rate](code/00g_CDC_rxrate.do)
@@ -57,23 +90,26 @@ j) [Vaccinations and community transmission data]
 - [Retrieve data](code/00j_covidhospitalizations_vaccinations_communitytransmission.ipynb)
 - [Create monthly data](code/00jbis_vaccination_comtransmission.do)
 
-k) [Substance Use Disorders, Mental Health, Treatment Need](code/00k_NSDUH_publish.do)
+k) [Substance Use Disorders, Mental Health, Treatment Need](code/00k_NSDUH.do)
 
 l) [Rural/urban classification](code/00l_USDA_rucc2023.do)
 
-### 2. Create analytic files
+### 1. Create analytic files
 a) [Create analytic files](code/01a_mergedatafiles.do)
 This code does the final cleaning and creates the analytic file
 
-### 3. Analytic code
+### 2. Descriptives
 
-#### Main analysis
+### 3. Analyses code
+Each of these scripts runs TMLE and SDR models.
+
+#### a) Main analysis
 - [ATE adjusted](code/03a_tmle_sdr_main_20240530.R)
 - [ATE unadjusted](code/03a_tmle_sdr_main_unadjusted_20240530.R)
 - [MTP adjusted](code/03b_tmle_sdr_mtp_20240530.R)
 - [MTP unadjusted](code/03b_tmle_sdr_mtp_unadjusted_20240530.R)
 
-#### Sensitivity analysis
+#### b) Sensitivity analysis
 - [ATE adjusted + CARES Act](code/03c_tmle_sdr_cares_allmonths_20240530.R)
 - [Any Moratoria](code/03d_tmle_sdr_anymoratoria_20240530.R)
 - [Stratified Before/After Sep 2020](code/03e_tmle_sdr_Sep2020_20240530.R)
