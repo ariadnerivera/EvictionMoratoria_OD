@@ -79,7 +79,7 @@ follows:
 
 - Python 3.9.18
 	- csv
-  - glob 0.7
+	- glob 0.7
 	- ijason 3.2.3
 	- io
 	- json 0.9.6
