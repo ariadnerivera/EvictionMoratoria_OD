@@ -67,7 +67,9 @@ follows:
 
 ## Computational Requirements
 - Stata (code was last run with version 18)
+
 - R 3.4.2
+
 	- haven 2.5.4
 	- tidyverse 2.0.0
 	- lmtp 1.3.2, for different covariate sets for treatment and outcome, the
@@ -78,6 +80,7 @@ follows:
 	- doParallel 1.0.17
 
 - Python 3.9.18
+
 	- csv
 	- glob 0.7
 	- ijason 3.2.3
