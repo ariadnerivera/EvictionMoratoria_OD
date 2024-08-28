@@ -122,6 +122,7 @@ c) [Clean ACS County level data](code/00c_ACSCounydata.ipynb)
 Census data obtained from socialexplorer.com and stored in data/1_raw/census_acs/
 Make sure to download these county-level variables for ACS 5-year datasets ending
 in years 2020 and 2021
+
 	- A00002:Population Density (Per Sq. Mile)
 	- B01001:Age (Short Version)
 	- A02001:Sex
