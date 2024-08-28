@@ -63,7 +63,7 @@ follows:
 - Fentanyl dataset
 - Vaccination and community transmissions data
 - Substance use disorders, mental health, treatment need
-- USDA Rural-Urban Continuum Codes 
+- USDA Rural-Urban Continuum Codes
 
 ## Computational Requirements
 - Stata (code was last run with version 18)
@@ -84,7 +84,7 @@ follows:
 	- io
 	- json 0.9.6
 	- matplotlib  3.8.0
-  - numpy 1.26.3
+	- numpy 1.26.3
 	- os
 	- pandas  1.3.4
 	- plotly 5.6.0
