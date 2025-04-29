@@ -18,9 +18,9 @@ clear
 
 pwd
 
-*Load dataset previously created
+*Load dataset previously created by team
 
-import delimited "Z:\cerdam01labSpace\MAIN DATA FILES\NFLIS Fentanyl\NFLIS_Metrics_2020.csv", clear 
+import delimited "LABPATH\MAIN DATA FILES\NFLIS Fentanyl\NFLIS_Metrics_2020.csv", clear 
 rename statename StateName
 rename year Year
 
@@ -28,7 +28,7 @@ rename year Year
 save "..\data\2_intermediate\NFLIS2020.dta", replace
 
 
-import delimited "Z:\cerdam01labSpace\MAIN DATA FILES\NFLIS Fentanyl\NFLIS_Metrics_2021.csv", clear 
+import delimited "LABPATH\NFLIS Fentanyl\NFLIS_Metrics_2021.csv", clear 
 rename statename StateName
 rename year Year
 

@@ -1,9 +1,6 @@
-* Set wd
-
-cd "C:\Users\rivera30\OneDrive - NYU Langone Health\EvictionMoratoria_OD"
-
+* This code formats dates of CUSP policy variables
 * Load Dataset
-import delimited ".\data\2_intermediate\cusp.csv", case(preserve) clear
+import delimited "..\data\2_intermediate\cusp.csv", case(preserve) clear
 
 * Rename geo vars so these are consistent with other databases	
 rename STATE StateName	
@@ -41,9 +38,9 @@ foreach var of varlist STEMERG-CASOPEN2 {
 	}
 
  
-save ".\data\2_intermediate\cusp_datesfmt.dta", replace
+save "..\data\2_intermediate\cusp_datesfmt.dta", replace
 
-* Create dataset for correlation
+* Create a dummy dataset by state to check for correlation among state policies
 	
 foreach var of varlist STEMERG-CASOPEN2 {
 		gen dummy_`var'= d`var'
@@ -58,5 +55,5 @@ keep StateAbbreviation dummy_EMSTART dummy_EMEND dummy_STEMERG2 dummy_CLSCHOOL d
 
 renpfix dummy_
 
-save ".\data\2_intermediate\cusp_dummypol_state.dta", replace
+save "..\data\2_intermediate\cusp_dummypol_state.dta", replace
 

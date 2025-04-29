@@ -9,9 +9,10 @@ clear
 *	EvictionMoratoria_OD/
 *	|-	code      # Where the scripts are stored
 *	|-	data      # Data files organized as follows
-*	|	|-	1_raw	# All files as obtained from the source
+*	|	|-	1_raw			# All files as obtained from the source
 *		|-	2_intermediate 	# All intermediate dataset
 *		|-	3_analytic		# Analytic datasets created	
+*	|-	Results   # Where results are stored
 
 * Make sure the structure of folders are as above. This script should be in
 * EvictionMoratoria_OD/code/
@@ -24,9 +25,12 @@ pwd
 *				Overdose county-level data from 2017 to 2021                 *
 ******************************************************************************
 
+* This section creates final county overdose death data that can be merged with
+* the other dataset.The overdose data was retrieved and extracted previously 
+* from the restricted-use mortality files
 
-* The overdose data was retrieved and extracted previously from the 
-* restricted-use mortality files
+
+* Load county-level dataset
 use "..\data\2_intermediate\od_2017_2021.dta", clear
 
 gen statename=State
@@ -41,6 +45,8 @@ destring geofips, replace
 
 rename year Year
 
+* Some county changes made so these can be merged with ACS data
+
 * Shannon County, South Dakota (46-113)
  *Changed name and code to Oglala Lakota County (46-102) effective May 1, 2015.
 replace geofips=46102 if geofips==46113
@@ -49,6 +55,7 @@ replace geofips=46102 if geofips==46113
 *Changed name and code to Kusilvak Census Area (02-158) effective July 1, 2015.
 replace geofips=2158 if geofips==2270
 
+* Create YearMonth variable
 tostring Year, replace
 
 gen YearMonth=Year+MonthDeath
@@ -66,7 +73,7 @@ save "..\data\2_intermediate\od_2020_2021_geofips.dta", replace
 
 
 ******************************************************************************
-*		   				Demographic data-downloads	                 		 *
+*		   				Demographic data prep for merging              		 *
 ******************************************************************************
 
 *This is the dataset created with 00c_ACSCounydata.ipynb
@@ -104,7 +111,7 @@ collapse (sum) totpop pop18under pop18_34 pop35to64 pop65plus popfemale popNH //
 
 xtset geofips Year
 
-*Lag vars for overcrowding
+*Lag vars for overcrowding and other housing variables
 
 gen L_occroomhalfless = l.occroomhalfless
 gen L_occroomhalfto1 = l.occroomhalfto1
@@ -112,7 +119,8 @@ gen L_occroom1to1half = l.occroom1to1half
 gen L_occroom1halftotwo = l.occroom1halftotwo
 gen L_occroom2plus = l.occroom2plus
 gen L_renterhu = l.renterhu
-	
+
+* ACS data is annual, this creates a monthly dataset	
 expand 12
 bysort geofips Year : gen group_index = _n
 gen str2 MonthNum = string( group_index ,"%02.0f")
@@ -129,20 +137,11 @@ gen pct_HSplus = ((highschool+highschoolplus)/pop25plus)*100
 gen pct_unemp=  (popunemp/pop16plus)*100
 gen pct_hhssinc = (householdsSSI/households)*100
 gen pct_hhpai = (housholdsPAI/households)*100
-
 gen pct_poprenterhu = (poprenterhousing/totpop)*100
-
 gen pct_poppoverty = (popinpoverty/ poppoovertystatus)*100
 gen pct_rent30to49 = (rent30to49/renterhu)*100
 gen pct_rent50plus = (rent50plus/renterhu)*100
 gen pct_pophealthins = (pophealthins/popcivnoninspop)*100
-
-
-*keep Year StateFIPS geofips totpop mhhinc gini group_index MonthNum ///
-	pct_pop18under pct_pop18_34 pct_pop35to64 pct_pop65plus pct_popNH ///
-	pct_popNHWhite pct_popNHBlack pct_popHispanic pct_popNHOther pct_HSplus ///
-	pct_unemp pct_hhssinc pct_hhpai pct_poprenterhu pct_poppoverty ///
-	pct_rent30to49 pct_rent50plus pct_pophealthins pct_popfemale area
 
 
 gen str5 fipscode = string( geofips ,"%05.0f")
@@ -243,7 +242,7 @@ save "..\data\2_intermediate\acs_county_2020_2021_clean.dta", replace
 
 
 ******************************************************************************
-*		   				Create state-level variables                   		 *
+*		   				Create state-level demographic variables           	 *
 ******************************************************************************
 
 
@@ -284,7 +283,6 @@ collapse (sum) totpop pop18under pop18_34 pop35to64 pop65plus popfemale popNH //
 xtset geofips Year
 
 *Lag vars for overcrowding
-
 gen L_occroomhalfless = l.occroomhalfless
 gen L_occroomhalfto1 = l.occroomhalfto1
 gen L_occroom1to1half = l.occroom1to1half
@@ -292,7 +290,6 @@ gen L_occroom1halftotwo = l.occroom1halftotwo
 gen L_occroom2plus = l.occroom2plus
 gen L_renterhu = l.renterhu
 	
-
 drop if Year==2019
 
 collapse (sum) totpop pop18under pop18_34 pop35to64 pop65plus popfemale popNH ///
@@ -313,6 +310,7 @@ collapse (sum) totpop pop18under pop18_34 pop35to64 pop65plus popfemale popNH //
 	(mean) mhhinc gini, by(Year StateFIPS)
 
 
+* Create percentage variables
 foreach V of varlist pop18under pop18_34 pop35to64 pop65plus popfemale popNH ///
 	popNHWhite popNHBlack popHispanic {
      gen pct_`V'_state=(`V'/totpop)*100
@@ -339,27 +337,6 @@ foreach var of varlist totpop-gini {
 
 save "..\data\2_intermediate\acs_state_2020_2021_clean.dta", replace
 
-******************************************************************************
-*		   			Prescription opioid rate data 	                		 *
-******************************************************************************
-
-
-**************************************************************************
-*rxrate
-* The data comes from here: https://www.cdc.gov/drugoverdose/rxrate-maps/county2020.html 
-* import delimited "\data\1_raw\rxrate_2020.csv", clear 
-* expand 12
-* bysort geofips: gen group_index = _n
-* gen str2 MonthNum = string( group_index ,"%02.0f")
-* expand 2 , gen(dupindicator)
-* gen Year=2020
-* replace Year=2021 if dupindicator==1
-* tostring Year, replace
-* gen YearMonth=Year+MonthNum 
-* drop group_index dupindicator
-
-* drop MonthNum Year 
-* save "2_intermediate\rxrate_2020_2021.dta", replace
 
 
 ******************************************************************************
@@ -812,8 +789,6 @@ save  "..\data\3_analytic\analysis_county_jan2020_dec2021.dta", replace
 
 
 * Make final changes to dataset
-
-
 use  "..\data\3_analytic\analysis_county_jan2020_dec2021.dta", clear
 *Drop data prior March 2020
 keep if YearMonth >202003
@@ -1059,6 +1034,18 @@ egen cumodcount=total(odcount), by (geofips)
 
 gen cumodrate=(cumodcount/totpop)*100000
 gen cumodratemon=cumodrate/20
+
+
+bysort geofips (MonthNum): gen cum_sum_odcount = sum(odcount)
+gen cumodrate2 = (cum_sum_odcount/totpop)*100000
+
+drop cumodratemon2
+
+gen cumodratemon2 = (cumodrate/(MonthNum-1)) if MonthNum>1
+
+gen cumodratemon2 = cumodrate2/(MonthNum-1) if MonthNum>1
+gen cumodratemon3 = cumodrate2/20 if MonthNum>1
+
 
 ** Gen lag covs, to check model
 xtset geofips MonthNum
