@@ -181,6 +181,8 @@ a) [Create analytic files](code/01a_mergedatafiles_analyticfile.do)
 This code does the final data cleaning, data merging to create the analytic file
 
 ### 2. Descriptives
+a) [Correlation plot of COVID-19 policies](code/02_CUSP_PolicyCorrelation_Covs.ipynb)
+Plot not included in the study
 
 ### 3. Analyses code
 Each of these scripts runs TMLE using the lmtp package in R.
