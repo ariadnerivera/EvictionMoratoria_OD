@@ -7,8 +7,7 @@ Cerdá M. The effect of lifting eviction moratoria on fatal drug overdoses in th
 context of the COVID-19 pandemic in the US. Under Review. 2024.
 
 
-Running the code requires, as noted in the code, requires folder structure as
-follows:
+Running the code requires folder structure as follows:
 
 	EvictionMoratoria_OD/
 	|-	code      # Where the scripts are stored
@@ -17,59 +16,66 @@ follows:
 		|-	2_intermediate 	# All intermediate dataset
 		|-	3_analytic		# Analytic datasets created
 	|-	results   # Where results are stored
-		|-	main
-		|-	main_unadjusted
-		|-	mtp
-		|-	mtp_unadjusted
-		|-	caresact
-		|-	anymoratoria
-		|-	sep2020
-		|-	tertiles
-		|-	stayslifted
-
 
 ## Dataset list
 
 - Restricted-use mortality data.
 	-	Access requires research-proposal review and approval by the National Center for Health Statistics (NCHS).
-	-	Information on how to apply can be found [here](/https://www.cdc.gov/nchs/nvss/nvss-restricted-data.htm)
+	-	Information on how to request access at NCHS can be found [here](https://www.cdc.gov/nchs/nvss/nvss-restricted-data.htm)
 
 -	COVID-19 US State Policy Database
-	- Dataset available [here](/https://github.com/USCOVIDpolicy/COVID-19-US-State-Policy-Database/tree/master)
+	- Dataset available [here](https://github.com/USCOVIDpolicy/COVID-19-US-State-Policy-Database/tree/master)
 
 - American Community Survey 5-year ending in 2020 and 2021
 	- Demographic and socioeconomic data from the Census for all counties available
-	[here](/https://www.socialexplorer.com/reports/socialexplorer/en/report/1e76e30e-e9f5-11ed-aa83-27bbc2272633)
+	[here](https://www.socialexplorer.com/reports/socialexplorer/en/report/1e76e30e-e9f5-11ed-aa83-27bbc2272633)
 
 - COVID-19 cases and deaths
 	- Data at the county level obtained from the 019 Novel Coronavirus Visual
 	Dashboard operated by the Johns Hopkins University Center for Systems Science
-	and Engineering (JHU CSSE) can be accessed [here](/https://github.com/CSSEGISandData/COVID-19)
+	and Engineering (JHU CSSE) can be accessed [here](https://github.com/CSSEGISandData/COVID-19)
 
 - Unemployment data
 	- Monthly unemployment data is obtained from the Bureau of Labor Statistics
-	that can be accessed [here](/https://www.bls.gov/lau/)
+	that can be accessed [here](https://www.bls.gov/lau/)
 
 - County Economic Impact Index
 	- Argonne National Laboratory developed the CEII to track near the COVID-19
-	impact at the county-level and can be accessed [here](/https://anl.app.box.com/s/q0e8ub9jzjyemg0x1y2clt01hkqxpg76)]
+	impact at the county-level and can be accessed [here](https://anl.app.box.com/s/q0e8ub9jzjyemg0x1y2clt01hkqxpg76)]
 
 - Oxford Covid-19 Government Response Tracker
-	- The Oxford Covid-19 Government Response Tracker (OxCGRT) collected information on which pandemic response measures were enacted by governments, and when [here](/https://github.com/OxCGRT/covid-policy-dataset)
+	- The Oxford Covid-19 Government Response Tracker (OxCGRT) collected information on which pandemic response measures were enacted by governments, and when [here](https://github.com/OxCGRT/covid-policy-dataset)
 
-- [County Opioid Dispensing Rate](/https://www.cdc.gov/overdose-prevention/data-research/facts-stats/opioid-dispensing-rate-maps.html)
+- County Opioid Dispensing Rate
+	- Download 2020 and 2021 csv files from [here](https://www.cdc.gov/overdose-prevention/data-research/facts-stats/opioid-dispensing-rate-maps.html)
 
-- Election returns dataset
+- County presidential election returns dataset
+	- Data obtained from the MIT Election Data and Science Lab, 2018,
+	"County Presidential Election Returns 2000-2020",
+	https://doi.org/10.7910/DVN/VOQCHQ, Harvard Dataverse, V12
+
 - Fentanyl dataset
+	- Variable created by the Center for Opioid Epidemiology and Policy. Data to
+	create ratios can be  obtained from [here](https://www.nflis.deadiversion.usdoj.gov/publicationsRedesign.xhtml) using the 2020 and 2021 public data files Table 2
+	and Table 3.
+
 - Vaccination and community transmissions data
+	- Vaccinations dataset obtained from [here](https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh/about_data)
+	- Community transmission dataset obtained from [here](https://data.cdc.gov/Public-Health-Surveillance/Weekly-COVID-19-County-Level-of-Community-Transmis/jgk8-6dpn/about_data)
+
 - Substance use disorders, mental health, treatment need
-- USDA Rural-Urban Continuum Codes
+	- Prevalence based estimates for states 2021-2022 NSDUH [here](https://www.samhsa.gov/data/report/2021-2022-nsduh-state-prevalence-estimates)
+	- Prevalence based estimates for states 2018-2019 NSDUH [here](https://www.samhsa.gov/data/report/2018-2019-nsduh-state-prevalence-estimates)
+
+		- Estimates for 2019-2020 are not available due to methodological constraints.
+		Explanation [here](https://www.samhsa.gov/data/nsduh/state-reports-NSDUH-2020)
+
+- USDA 2023 Rural-Urban Continuum Codes
+	- The 2023 Rural-Urban Continuum Codes from [here](https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/)
 
 ## Computational Requirements
 - Stata (code was last run with version 18)
-
 - R 3.4.2
-
 	- haven 2.5.4
 	- tidyverse 2.0.0
 	- lmtp 1.3.2, for different covariate sets for treatment and outcome, the
@@ -78,9 +84,7 @@ follows:
 	- future 1.33.0
 	- foreach 1.5.2
 	- doParallel 1.0.17
-
 - Python 3.9.18
-
 	- csv
 	- glob 0.7
 	- ijason 3.2.3
@@ -164,8 +168,8 @@ h) [Elections Data](code/00h_electionreturns.do)
 
 i) [Fentanyl Ratio](code/00i_NFLIS2020_2021.do)
 
-j) [Vaccinations and community transmission data]
-- [Retrieve data](code/00j_covidhospitalizations_vaccinations_communitytransmission.ipynb)
+j) Vaccinations and community transmission data
+- [Retrieve data](code/00j_vaccinations_communitytransmission.ipynb)
 - [Create monthly data](code/00jbis_vaccination_comtransmission.do)
 
 k) [Substance Use Disorders, Mental Health, Treatment Need](code/00k_NSDUH.do)
@@ -173,25 +177,43 @@ k) [Substance Use Disorders, Mental Health, Treatment Need](code/00k_NSDUH.do)
 l) [Rural/urban classification](code/00l_USDA_rucc2023.do)
 
 ### 1. Create analytic files
-a) [Create analytic files](code/01a_mergedatafiles.do)
-This code does the final cleaning and creates the analytic file
+a) [Create analytic files](code/01a_mergedatafiles_analyticfile.do)
+This code does the final data cleaning, data merging to create the analytic file
 
 ### 2. Descriptives
 
 ### 3. Analyses code
-Each of these scripts runs TMLE and SDR models.
+Each of these scripts runs TMLE using the lmtp package in R.
 
-#### a) Main analysis
-- [ATE adjusted](code/03a_tmle_sdr_main_20240530.R)
-- [ATE unadjusted](code/03a_tmle_sdr_main_unadjusted_20240530.R)
-- [MTP adjusted](code/03b_tmle_sdr_mtp_20240530.R)
-- [MTP unadjusted](code/03b_tmle_sdr_mtp_unadjusted_20240530.R)
+#### a) Main analysis with cluster indicators (Table 1)
+- [ATE adjusted](code/03a_tmle_main_fe.R)
+- [ATE unadjusted](code/03c_tmle_main_unadjusted.R)
+- [MTP adjusted](code/03d_tmle_mtp_fe.R)
+- [MTP unadjusted](code/03f_tmle_mtp_unadjusted.R)
 
-#### b) Sensitivity analysis
-- [ATE adjusted + CARES Act](code/03c_tmle_sdr_cares_allmonths_20240530.R)
-- [Any Moratoria](code/03d_tmle_sdr_anymoratoria_20240530.R)
-- [Stratified Before/After Sep 2020](code/03e_tmle_sdr_Sep2020_20240530.R)
+#### b) Sensitivity analysis with cluster indicators (Table 2)
+- [ATE adjusted + CARES Act](code/03g_tmle_main_caresact_outcome_fe.R)
+- [Any Moratoria](code/03i_tmle_mainfe_anymoratoria.R)
+
 - Tertiles using COVID-19 Housing Policy Scorecard
-  a) [Tertile 1](code/03f_ltmle_code_tertile1_20240530.R)
-  b) [Tertile 2](code/03f_ltmle_code_tertile2_20240530.R)
-  b) [Tertile 3](code/03f_ltmle_code_tertile3_20240530.R)
+  a) [Tertile 1](code/03o_tmle_mainfe_tert1.R)
+  b) [Tertile 2](code/03q_tmle_mainfe_tert2.R)
+  b) [Tertile 3](code/03s_tmle_mainfe_tert3.R)
+
+#### c) Main analysis without cluster indicators (Table S5)
+- [ATE adjusted](code/03b_tmle_main.R)
+- [MTP adjusted](code/03e_tmle_mtp.R)
+
+#### d) Sensitivity analysis without cluster indicators (Table S6)
+- [ATE adjusted + CARES Act](code/03h_tmle_main_caresact_outcome.R)
+- [Any Moratoria](code/03j_tmle_main_anymoratoria.R)
+
+- Tertiles using COVID-19 Housing Policy Scorecard
+  a) [Tertile 1](code/03p_tmle_main_tert1.R)
+  b) [Tertile 2](code/03r_tmle_main_tert2.R)
+  b) [Tertile 3](code/03t_tmle_main_tert3.R)
+
+### 4. Manuscript tables
+
+#### Code to create Tables 1, 2 and S5 and S6
+[Tables](code/04a_results_tables_manuscript.R)
