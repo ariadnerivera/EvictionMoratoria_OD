@@ -49,16 +49,11 @@ format_results <- function(results) {
 # per 100,000 people between May 2020 to December 2021, models include state FE
 
 t1.results <- c("main_fe",
-                "main_unadjusted",
-                "mtp_fe",
-                "mtp_unadjusted"
-                )
+                "main_unadjusted")
 
 t1.names <- c(
   "All Treated vs. All Untreated (Adjusted)",
-  "All Treated vs. All Untreated (Unadjusted)",
-  "One-month Moratoria Extension vs. Observed (Adjusted)",
-  "One-month Moratoria Extension vs. Observed (Unadjusted)"
+  "All Treated vs. All Untreated (Unadjusted)"
 )
 
 # Create model information
@@ -127,12 +122,19 @@ print(t2.table)
 
 #################################
 ts5.results <- c("main",
-                "mtp")
+                 "caresact_outcome",
+                 "anymoratoria",
+                 "tert1",
+                 "tert2",
+                 "tert3")
 
 ts5.names <- c(
   "All Treated vs. All Untreated (Adjusted)",
-  "One-month Moratoria Extension vs. Observed (Adjusted)"
-)
+  "All Treated vs. All Untreated (Adjusted + Cares Act)",
+  "All Treated vs. All Untreated (Adjusted + Any Moratoria)",
+  "All Treated vs. All Untreated (Adjusted, Tertile 1)",
+  "All Treated vs. All Untreated (Adjusted, Tertile 2)",
+  "All Treated vs. All Untreated (Adjusted, Tertile 3)")
 
 
 # Create model information
@@ -157,43 +159,6 @@ combined_ts5.results <- do.call(rbind, ts5.results.list)
 ts5.table <- format_results(combined_ts5.results)
 print(ts5.table)
 
-###########################
-ts6.results <- c("caresact_outcome",
-                 "anymoratoria",
-                 "tert1",
-                 "tert2",
-                 "tert3")
-
-ts6.names <- c(
-  "All Treated vs. All Untreated (Adjusted + Cares Act)",
-  "All Treated vs. All Untreated (Adjusted + Any Moratoria)",
-  "All Treated vs. All Untreated (Adjusted, Tertile 1)",
-  "All Treated vs. All Untreated (Adjusted, Tertile 2)",
-  "All Treated vs. All Untreated (Adjusted, Tertile 3)"
-)
-
-
-# Create model information
-ts6.info <- lapply(seq_along(ts6.results), function(i) {
-  paths <- generate_file_paths(ts6.results[i])
-  list(
-    tmle_shift = paths$tmle_shift,
-    tmle_ref = paths$tmle_ref,
-    name = ts6.names[i]
-  )
-})
-
-# Load and combine results
-ts6.results.list <- lapply(ts6.info, function(model) {
-  load_results(model$tmle_shift, model$tmle_ref, model$name)
-})
-
-# Combine all results into a single data frame
-combined_ts6.results <- do.call(rbind, ts6.results.list)
-
-# Format and display the table
-ts6.table <- format_results(combined_ts6.results)
-print(ts6.table)
 
 
 # Save files
@@ -202,4 +167,3 @@ out.path <- "results/"
 write_excel_csv(t1.table, file = paste0(out.path, "t1_table", ".csv"))
 write_excel_csv(t2.table, file = paste0(out.path, "t2_table", ".csv"))
 write_excel_csv(ts5.table, file = paste0(out.path, "ts5_table", ".csv"))
-write_excel_csv(ts6.table, file = paste0(out.path, "ts6_table", ".csv"))

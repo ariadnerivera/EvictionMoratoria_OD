@@ -2,9 +2,9 @@
 
 This repository contains the code to clean and conduct analysis in the study:
 
-Rivera Aguirre A, Díaz I, Routhier G, McKay C, Matthay E, Friedman S, Doran K,
+Rivera Aguirre A, Díaz I, Routhier G, McKay CC, Matthay EC, Friedman SR, Doran KM,
 Cerdá M. The effect of lifting eviction moratoria on fatal drug overdoses in the
-context of the COVID-19 pandemic in the US. Under Review. 2024.
+context of the COVID-19 pandemic in the US, American Journal of Epidemiology, 2025 https://doi.org/10.1093/aje/kwaf105.
 
 
 Running the code requires folder structure as follows:
@@ -190,8 +190,6 @@ Each of these scripts runs TMLE using the lmtp package in R.
 #### a) Main analysis with cluster indicators (Table 1)
 - [ATE adjusted](code/03a_tmle_main_fe.R)
 - [ATE unadjusted](code/03c_tmle_main_unadjusted.R)
-- [MTP adjusted](code/03d_tmle_mtp_fe.R)
-- [MTP unadjusted](code/03f_tmle_mtp_unadjusted.R)
 
 #### b) Sensitivity analysis with cluster indicators (Table 2)
 - [ATE adjusted + CARES Act](code/03g_tmle_main_caresact_outcome_fe.R)
@@ -204,9 +202,6 @@ Each of these scripts runs TMLE using the lmtp package in R.
 
 #### c) Main analysis without cluster indicators (Table S5)
 - [ATE adjusted](code/03b_tmle_main.R)
-- [MTP adjusted](code/03e_tmle_mtp.R)
-
-#### d) Sensitivity analysis without cluster indicators (Table S6)
 - [ATE adjusted + CARES Act](code/03h_tmle_main_caresact_outcome.R)
 - [Any Moratoria](code/03j_tmle_main_anymoratoria.R)
 
@@ -217,5 +212,5 @@ Each of these scripts runs TMLE using the lmtp package in R.
 
 ### 4. Manuscript tables
 
-#### Code to create Tables 1, 2 and S5 and S6
+#### Code to create Tables 1, 2 and S5 
 [Tables](code/04a_results_tables_manuscript.R)
